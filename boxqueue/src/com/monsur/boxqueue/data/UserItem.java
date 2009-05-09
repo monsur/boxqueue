@@ -44,6 +44,12 @@ public class UserItem {
   @Persistent
   private String sourceId;
 
+  @Persistent
+  private boolean watched = false;
+
+  @Persistent
+  private String guid;
+
   public UserItem() {
     dateAdded = new Date();
     dateEdited = new Date();
@@ -130,6 +136,21 @@ public class UserItem {
     this.sourceId = sourceId;
   }
 
+  public boolean getWatched() {
+    return watched;
+  }
+
+  public void setWatched(boolean watched) {
+    this.watched = watched;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
+  }
 
   @Persistent
   private Date pubDate;

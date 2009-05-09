@@ -3,6 +3,9 @@ package com.monsur.boxqueue.servlet;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,12 +76,31 @@ public class AddServlet extends HttpServlet {
       userItem.setOriginalUrl(urlString);
       userItem.setFeedId(userFeed.getId());
       userItem.setUser(userService.getCurrentUser());
+      userItem.setGuid(generateGuid(userItem));
 
       dataHelper.createOrUpdate(userItem);
     } finally {
       dataHelper.close();
     }
     showSuccess("Successfully added \"" + userItem.getTitle() + "\" to Boxqueue!", response);
+  }
+
+  private String generateGuid(UserItem userItem) throws IOException {
+    Random r = new Random();
+    String guidString = userItem.getUser().getNickname()
+        + "-" + userItem.getFeedId()
+        + "-" + userItem.getItemSource().toString()
+        + "-" + userItem.getSourceId()
+        + "-" + r.nextInt();
+    MessageDigest m;
+    try {
+      m = MessageDigest.getInstance("MD5");
+      m.update(guidString.getBytes(), 0, guidString.length());
+      return "";
+    } catch (NoSuchAlgorithmException e) {
+      // TODO(monsur): Auto-generated catch block
+      throw new IOException("No such algorithm");
+    }
   }
 
   private void showError(String msg, HttpServletResponse response) throws IOException {
