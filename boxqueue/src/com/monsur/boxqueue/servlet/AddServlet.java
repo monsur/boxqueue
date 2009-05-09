@@ -18,6 +18,7 @@ import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
 import com.monsur.boxqueue.data.DataHelper;
 import com.monsur.boxqueue.data.UserFeed;
 import com.monsur.boxqueue.data.UserItem;
+import com.monsur.boxqueue.util.HelperMethods;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class AddServlet extends HttpServlet {
@@ -92,15 +93,7 @@ public class AddServlet extends HttpServlet {
         + "-" + userItem.getItemSource().toString()
         + "-" + userItem.getSourceId()
         + "-" + r.nextInt();
-    MessageDigest m;
-    try {
-      m = MessageDigest.getInstance("MD5");
-      m.update(guidString.getBytes(), 0, guidString.length());
-      return "";
-    } catch (NoSuchAlgorithmException e) {
-      // TODO(monsur): Auto-generated catch block
-      throw new IOException("No such algorithm");
-    }
+    return HelperMethods.hash(guidString);
   }
 
   private void showError(String msg, HttpServletResponse response) throws IOException {

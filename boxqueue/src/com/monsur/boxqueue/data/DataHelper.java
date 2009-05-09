@@ -71,12 +71,12 @@ public class DataHelper {
     return userFeed;
   }
 
-  public List<UserItem> getUserItems(UserFeed feed) {
+  public List<UserItem> getUnwatchedUserItems(UserFeed feed) {
     Query query = pm.newQuery(UserItem.class);
-    query.setFilter("user == userParam && feedId == feedIdParam");
-    query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam");
+    query.setFilter("user == userParam && feedId == feedIdParam && watched == watchedParam");
+    query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam, boolean watchedParam");
     queries.add(query);
-    return (List<UserItem>) query.executeWithArray(feed.getUser(), feed.getId());
+    return (List<UserItem>) query.executeWithArray(feed.getUser(), feed.getId(), false);
   }
 
   public UserItem createOrUpdate(UserItem item) {
