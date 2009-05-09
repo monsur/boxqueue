@@ -30,6 +30,12 @@ public class UserFeed {
   @Persistent
   private Text title;
 
+  @Persistent
+  private String path;
+
+  @Persistent
+  private Integer boxeeViewOption;
+
   public UserFeed() {
     dateAdded = new Date();
     dateEdited = new Date();
@@ -69,5 +75,33 @@ public class UserFeed {
 
   public void setTitle(String title) {
     this.title = new Text(title);
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
+  public BoxeeViewOption getBoxeeViewOption() {
+    if (boxeeViewOption == null) {
+      return BoxeeViewOption.LINE;
+    }
+    try {
+      return BoxeeViewOption.getById(boxeeViewOption);
+    } catch (IllegalArgumentException ex) {
+      return BoxeeViewOption.LINE;
+    }
+  }
+
+  public void setBoxeeViewOption(BoxeeViewOption boxeeViewOption) {
+    this.boxeeViewOption = new Integer(boxeeViewOption.getId());
+  }
+
+  public static String generatePath() {
+    // TODO(monsur): implement this
+    throw new UnsupportedOperationException("generatePath() doesn't exist yet");
   }
 }

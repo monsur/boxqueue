@@ -33,7 +33,7 @@ public class MediaContent {
     this.type = type;
   }
 
-  public int getDuration() {
+  public Integer getDuration() {
     return duration;
   }
 
