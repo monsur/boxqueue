@@ -3,12 +3,9 @@ package com.monsur.boxqueue.data;
 import java.util.Date;
 import java.util.List;
 
-import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 
 public class DataHelper {

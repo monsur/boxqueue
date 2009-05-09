@@ -1,8 +1,5 @@
 package com.monsur.boxqueue.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -10,6 +7,7 @@ import javax.jdo.annotations.Persistent;
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
+@EmbeddedOnly
 public class MediaKeywords {
 
   @Persistent

@@ -7,6 +7,7 @@ import javax.jdo.annotations.Persistent;
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
+@EmbeddedOnly
 public class MediaCopyright {
 
   @Persistent
