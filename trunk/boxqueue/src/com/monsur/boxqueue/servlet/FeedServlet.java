@@ -36,7 +36,7 @@ public class FeedServlet extends HttpServlet {
         return;
       }
 
-      List<UserItem> items = dataHelper.getUserItems(feed);
+      List<UserItem> items = dataHelper.getUnwatchedUserItems(feed);
 
       BaseFormatter formatter = new BoxeeFeedFormatter();
       try {
