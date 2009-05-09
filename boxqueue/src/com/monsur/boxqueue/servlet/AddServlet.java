@@ -19,7 +19,7 @@ import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class AddServlet extends HttpServlet {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -5001987995408331518L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,19 +59,25 @@ public class AddServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
 
-    UserFeed userFeed = DataHelper.loadUserFeed(userService.getCurrentUser());
-    if (userFeed == null) {
-      userFeed = DataHelper.createUserFeed(userService.getCurrentUser());
+    DataHelper dataHelper = new DataHelper();
+    dataHelper.open();
+    try {
+      UserFeed userFeed = dataHelper.getUserFeed(userService.getCurrentUser());
+      if (userFeed == null) {
+        userFeed = dataHelper.createUserFeed(userService.getCurrentUser());
+      }
+
+      // TODO(monsur): what if media:content or other things are null?
+      userItem.setItemSource(adaptor.getItemSource());
+      userItem.setSourceId(adaptor.getSourceId());
+      userItem.setOriginalUrl(urlString);
+      userItem.setFeedId(userFeed.getId());
+      userItem.setUser(userService.getCurrentUser());
+
+      dataHelper.createOrUpdate(userItem);
+    } finally {
+      dataHelper.close();
     }
-
-    userItem.setItemSource(adaptor.getItemSource());
-    userItem.setSourceId(adaptor.getSourceId());
-    userItem.setOriginalUrl(urlString);
-    userItem.setFeedId(userFeed.getId());
-    userItem.setUser(userService.getCurrentUser());
-
-    DataHelper.createOrUpdate(userItem);
-
     showSuccess("Successfully added \"" + userItem.getTitle() + "\" to Boxqueue!", response);
   }
 

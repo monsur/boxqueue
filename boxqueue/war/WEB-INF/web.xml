@@ -8,9 +8,17 @@
     <servlet-name>addServlet</servlet-name>
     <servlet-class>com.monsur.boxqueue.servlet.AddServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>feedServlet</servlet-name>
+    <servlet-class>com.monsur.boxqueue.servlet.FeedServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>addServlet</servlet-name>
     <url-pattern>/private/add</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>feedServlet</servlet-name>
+    <url-pattern>/feed/*</url-pattern>
   </servlet-mapping>
   
   <security-constraint>
