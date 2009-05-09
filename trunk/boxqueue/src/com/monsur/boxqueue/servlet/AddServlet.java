@@ -1,14 +1,9 @@
 package com.monsur.boxqueue.servlet;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,14 +12,14 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.monsur.boxqueue.adaptor.VideoAdaptor;
 import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
-import com.monsur.boxqueue.adaptor.YouTubeAdaptor;
 import com.monsur.boxqueue.data.DataHelper;
-import com.monsur.boxqueue.data.ItemSource;
 import com.monsur.boxqueue.data.UserFeed;
 import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class AddServlet extends HttpServlet {
+
+  private static final long serialVersionUID = 1L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
