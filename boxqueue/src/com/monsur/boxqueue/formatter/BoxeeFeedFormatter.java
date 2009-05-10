@@ -128,6 +128,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     Map<String, String> attributesMap = new HashMap<String, String>();
     attributesMap.put("url", ServletHelper.getUrl("/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"), request));
     attributesMap.put("type", mediaContent.getType());
+    // TODO(monsur): Duration is appearing as minutes
     if (mediaContent.getDuration() != null) {
       attributesMap.put("duration", Integer.toString(mediaContent.getDuration()));
     }
