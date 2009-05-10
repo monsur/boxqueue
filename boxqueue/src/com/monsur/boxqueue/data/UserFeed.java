@@ -84,7 +84,7 @@ public class UserFeed {
   }
 
   private String getDefaultTitle() {
-    return user.getNickname() + "'s Boxqueue Feed";
+    return user.getNickname() + " - Boxqueue Feed";
   }
 
   public void setTitle(String title) {
