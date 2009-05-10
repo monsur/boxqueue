@@ -4,6 +4,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+
   <servlet>
     <servlet-name>addServlet</servlet-name>
     <servlet-class>com.monsur.boxqueue.servlet.AddServlet</servlet-class>
@@ -12,6 +13,11 @@
     <servlet-name>feedServlet</servlet-name>
     <servlet-class>com.monsur.boxqueue.servlet.FeedServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>getContentServlet</servlet-name>
+    <servlet-class>com.monsur.boxqueue.servlet.GetContentServlet</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>addServlet</servlet-name>
     <url-pattern>/private/add</url-pattern>
@@ -19,6 +25,10 @@
   <servlet-mapping>
     <servlet-name>feedServlet</servlet-name>
     <url-pattern>/feed/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>getContentServlet</servlet-name>
+    <url-pattern>/go</url-pattern>
   </servlet-mapping>
   
   <security-constraint>

@@ -83,6 +83,7 @@ public class DataHelper {
     Query query = pm.newQuery(UserItem.class);
     query.setFilter("user == userParam && feedId == feedIdParam && itemSource == itemSourceParam && sourceId == sourceIdParam");
     query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam, int itemSourceParam, String sourceIdParam");
+    // TODO(monsur): make this return one item
     List<UserItem> existingItems = (List<UserItem>) query.executeWithArray(
         item.getUser(), item.getFeedId(), item.getItemSource().ordinal(), item.getSourceId());
     queries.add(query);
@@ -93,5 +94,18 @@ public class DataHelper {
       pm.makePersistent(item);
     }
     return item;
+  }
+
+  public UserItem getUserItemByGuid(String guid) {
+    Query query = pm.newQuery(UserItem.class);
+    query.setFilter("guid == guidParam");
+    query.declareParameters("String guidParam");
+    // TODO(monsur): make this return one item
+    List<UserItem> item = (List<UserItem>) query.execute(guid);
+    queries.add(query);
+    if (item.size() > 0) {
+      return item.get(0);
+    }
+    return null;
   }
 }
