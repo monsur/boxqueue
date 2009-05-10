@@ -29,7 +29,7 @@ function showItem(id){
   } catch(e) {
     url = '';
   }
-  var iframe_url = 'http://localhost:8080/private/add?url='+ encodeURIComponent(url);
+  var iframe_url = 'http://boxqueue.appspot.com/private/add?url='+ encodeURIComponent(url);
   var existing_iframe = document.getElementById('boxqueue_add_bookmarklet_iframe');
   if (existing_iframe){
     showItem('boxqueue_add_bookmarklet');

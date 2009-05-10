@@ -32,7 +32,7 @@ public class FeedServlet extends HttpServlet {
     try {
       UserFeed feed = dataHelper.getUserFeedByPath(path);
       if (feed == null) {
-        response.sendError(response.SC_NOT_FOUND);
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
         return;
       }
 
@@ -42,7 +42,7 @@ public class FeedServlet extends HttpServlet {
       try {
         formatter.getOutput(feed, items, request, response);
       } catch (FormatterException ex) {
-        response.sendError(response.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
       }
     } finally {
       dataHelper.close();
