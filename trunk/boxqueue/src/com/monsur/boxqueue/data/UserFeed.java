@@ -1,6 +1,8 @@
 package com.monsur.boxqueue.data;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -10,6 +12,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
+import com.monsur.boxqueue.util.HelperMethods;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class UserFeed {
@@ -111,8 +114,9 @@ public class UserFeed {
     this.boxeeViewOption = new Integer(boxeeViewOption.getId());
   }
 
-  public static String generatePath() {
-    // TODO(monsur): implement this
-    throw new UnsupportedOperationException("generatePath() doesn't exist yet");
+  public static String generatePath(User user) throws IOException {
+    Random r = new Random();
+    String path = user.getNickname() + "-" + r.nextInt();
+    return HelperMethods.hash(path);
   }
 }

@@ -40,7 +40,7 @@ public class FeedServlet extends HttpServlet {
 
       BaseFormatter formatter = new BoxeeFeedFormatter();
       try {
-        formatter.getOutput(feed, items, response);
+        formatter.getOutput(feed, items, request, response);
       } catch (FormatterException ex) {
         response.sendError(response.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
       }
