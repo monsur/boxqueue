@@ -21,6 +21,7 @@ public class GetContentServlet extends HttpServlet {
     dataHelper.open();
     UserItem item = dataHelper.getUserItemByGuid(guid);
     String url = item.getMediaContent().getUrl();
+    // TODO(monsur): Create cron to purge watched itemss
     item.setWatched(true);
     dataHelper.close();
     response.sendRedirect(url);

@@ -3,8 +3,6 @@ package com.monsur.boxqueue.servlet;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import javax.servlet.http.HttpServlet;
