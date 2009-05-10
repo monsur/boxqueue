@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -29,13 +30,14 @@ import com.monsur.boxqueue.data.MediaKeywords;
 import com.monsur.boxqueue.data.MediaThumbnail;
 import com.monsur.boxqueue.data.UserFeed;
 import com.monsur.boxqueue.data.UserItem;
+import com.monsur.boxqueue.servlet.ServletHelper;
 
 public class BoxeeFeedFormatter implements BaseFormatter {
 
   private static SimpleDateFormat RFC822DATEFORMAT
       = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
 
-  public void getOutput(UserFeed feed, List<UserItem> items, HttpServletResponse response) throws FormatterException {
+  public void getOutput(UserFeed feed, List<UserItem> items, HttpServletRequest request, HttpServletResponse response) throws FormatterException {
     try {
       PrintWriter out = response.getWriter();
       StreamResult streamResult = new StreamResult(out);
@@ -56,12 +58,12 @@ public class BoxeeFeedFormatter implements BaseFormatter {
       startElement(hd, "channel");
       addElement(hd, "title", null, feed.getTitle());
       addElement(hd, "description", null, feed.getTitle());
-      addFeedLinks(hd, feed);
+      addFeedLinks(hd, feed, request);
       addBoxeeDisplay(hd, feed);
       // TODO(monsur): Add boxee:expiry
       // TODO(monsur): Add boxee:background-image
       for (UserItem item : items) {
-        addItem(hd, item);
+        addItem(hd, item, request);
       }
       endElement(hd, "channel");
       endElement(hd, "rss");
@@ -75,9 +77,9 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     }
   }
 
-  private void addFeedLinks(TransformerHandler hd, UserFeed feed)
+  private void addFeedLinks(TransformerHandler hd, UserFeed feed, HttpServletRequest request)
       throws SAXException, UnsupportedEncodingException {
-    String link = "http://boxqueue.appspot.com/feed/" + URLEncoder.encode(feed.getPath(), "UTF-8");
+    String link = ServletHelper.getUrl("/feed/" + URLEncoder.encode(feed.getPath(), "UTF-8"), request);
     addElement(hd, "link", null, link);
     Map<String, String> attributesMap = new HashMap<String, String>();
     attributesMap.put("href", link);
@@ -90,7 +92,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     return RFC822DATEFORMAT.format(date);
   }
 
-  private void addItem(TransformerHandler hd, UserItem item) throws SAXException, UnsupportedEncodingException {
+  private void addItem(TransformerHandler hd, UserItem item, HttpServletRequest request) throws SAXException, UnsupportedEncodingException {
     startElement(hd, "item");
     addElement(hd, "pubDate", null, getDateAsRFC822String(item.getDateSort()));
     addElement(hd, "title", null, item.getTitle());
@@ -99,7 +101,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     attributesMap.put("isPermaLink", "false");
     addElement(hd, "guid", attributesMap, item.getKey().toString());
     // TODO(monsur): add link
-    addMediaContent(hd, item, item.getMediaContent());
+    addMediaContent(hd, item, request, item.getMediaContent());
     addMediaThumbnail(hd, item.getMediaThumbnail());
     // TODO(monsur): add media credit
     // TODO(monsur): add media rating
@@ -121,11 +123,9 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     addElement(hd, "media:thumbnail", attributesMap, null);
   }
 
-  private void addMediaContent(TransformerHandler hd, UserItem item, MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {
+  private void addMediaContent(TransformerHandler hd, UserItem item, HttpServletRequest request, MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {
     Map<String, String> attributesMap = new HashMap<String, String>();
-//  attributesMap.put("url", mediaContent.getUrl());
-    // TODO(monsur): Fix this url to work on both localhost and live
-    attributesMap.put("url", "http://boxqueue.appspot.com/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"));
+    attributesMap.put("url", ServletHelper.getUrl("/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"), request));
     attributesMap.put("type", mediaContent.getType());
     if (mediaContent.getDuration() != null) {
       attributesMap.put("duration", Integer.toString(mediaContent.getDuration()));

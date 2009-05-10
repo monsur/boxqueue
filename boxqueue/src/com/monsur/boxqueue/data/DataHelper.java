@@ -1,5 +1,6 @@
 package com.monsur.boxqueue.data;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.google.appengine.api.users.User;
+import com.monsur.boxqueue.util.HelperMethods;
 
 public class DataHelper {
 
@@ -63,10 +65,10 @@ public class DataHelper {
     return null;
   }
 
-  public UserFeed createUserFeed(User user) {
+  public UserFeed createUserFeed(User user) throws IOException {
     UserFeed userFeed = new UserFeed();
     userFeed.setUser(user);
-    userFeed.setPath(user.getNickname());
+    userFeed.setPath(UserFeed.generatePath(user));
     pm.makePersistent(userFeed);
     return userFeed;
   }
