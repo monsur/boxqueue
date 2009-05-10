@@ -20,6 +20,11 @@ public class GetContentServlet extends HttpServlet {
     DataHelper dataHelper = new DataHelper();
     dataHelper.open();
     UserItem item = dataHelper.getUserItemByGuid(guid);
+    if (item == null) {
+      // TODO(monsur): need a custom 404 page/error page.
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
     String url = item.getMediaContent().getUrl();
     // TODO(monsur): Create cron to purge watched itemss
     item.setWatched(true);

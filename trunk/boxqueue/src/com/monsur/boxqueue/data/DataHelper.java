@@ -23,8 +23,7 @@ public class DataHelper {
 
   public void open() {
     if (opened) {
-      // TODO(monsur): make this a custom exception
-      throw new IllegalArgumentException("Alredy opened.");
+      return;
     }
     pm = PMF.get().getPersistenceManager();
     opened = true;
@@ -57,12 +56,9 @@ public class DataHelper {
     Query query = pm.newQuery(UserFeed.class);
     query.setFilter("path == pathParam");
     query.declareParameters("String pathParam");
-    List<UserFeed> results = (List<UserFeed>) query.execute(path);
+    query.setUnique(true);
     queries.add(query);
-    if (results.iterator().hasNext()) {
-      return results.get(0);
-    }
-    return null;
+    return (UserFeed) query.execute(path);
   }
 
   public UserFeed createUserFeed(User user) throws IOException {
@@ -85,13 +81,13 @@ public class DataHelper {
     Query query = pm.newQuery(UserItem.class);
     query.setFilter("user == userParam && feedId == feedIdParam && itemSource == itemSourceParam && sourceId == sourceIdParam");
     query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam, int itemSourceParam, String sourceIdParam");
-    // TODO(monsur): make this return one item
-    List<UserItem> existingItems = (List<UserItem>) query.executeWithArray(
-        item.getUser(), item.getFeedId(), item.getItemSource().ordinal(), item.getSourceId());
+    query.setUnique(true);
     queries.add(query);
-    if (existingItems.size() > 0) {
-      existingItems.get(0).setDateSort(new Date());
-      item = existingItems.get(0);
+    UserItem existingItem = (UserItem) query.executeWithArray(
+        item.getUser(), item.getFeedId(), item.getItemSource().ordinal(), item.getSourceId());
+    if (existingItem != null) {
+      existingItem.setDateSort(new Date());
+      item = existingItem;
     } else {
       pm.makePersistent(item);
     }
@@ -102,12 +98,8 @@ public class DataHelper {
     Query query = pm.newQuery(UserItem.class);
     query.setFilter("guid == guidParam");
     query.declareParameters("String guidParam");
-    // TODO(monsur): make this return one item
-    List<UserItem> item = (List<UserItem>) query.execute(guid);
+    query.setUnique(true);
     queries.add(query);
-    if (item.size() > 0) {
-      return item.get(0);
-    }
-    return null;
+    return (UserItem) query.execute(guid);
   }
 }
