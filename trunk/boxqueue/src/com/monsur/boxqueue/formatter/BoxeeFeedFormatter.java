@@ -32,6 +32,7 @@ import com.monsur.boxqueue.data.UserFeed;
 import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.servlet.ServletHelper;
 
+// TODO(monsur): support etags?
 public class BoxeeFeedFormatter implements BaseFormatter {
 
   private static SimpleDateFormat RFC822DATEFORMAT
