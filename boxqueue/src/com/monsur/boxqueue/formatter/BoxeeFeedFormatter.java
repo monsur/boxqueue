@@ -44,7 +44,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
       hd = tf.newTransformerHandler();
       Transformer serializer = hd.getTransformer();
       serializer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
-//      serializer.setOutputProperty(OutputKeys.INDENT,"yes");
+      serializer.setOutputProperty(OutputKeys.INDENT,"yes");
       hd.setResult(streamResult);
       hd.startDocument();
       Map<String, String> attributesMap = new HashMap<String, String>();
@@ -54,8 +54,8 @@ public class BoxeeFeedFormatter implements BaseFormatter {
       attributesMap.put("xmlns:boxee", "http://boxee.tv/spec/rss/");
       startElement(hd, "rss", attributesMap);
       startElement(hd, "channel");
-      addElement(hd, "title", null, feed.getUser().getNickname() + "'s Boxqueue Feed");
-      addElement(hd, "description", null, feed.getUser().getNickname() + "'s Boxqueue Feed");
+      addElement(hd, "title", null, feed.getTitle());
+      addElement(hd, "description", null, feed.getTitle());
       addFeedLinks(hd, feed);
       addBoxeeDisplay(hd, feed);
       // TODO(monsur): Add boxee:expiry
@@ -90,7 +90,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     return RFC822DATEFORMAT.format(date);
   }
 
-  private void addItem(TransformerHandler hd, UserItem item) throws SAXException {
+  private void addItem(TransformerHandler hd, UserItem item) throws SAXException, UnsupportedEncodingException {
     startElement(hd, "item");
     addElement(hd, "pubDate", null, getDateAsRFC822String(item.getDateSort()));
     addElement(hd, "title", null, item.getTitle());
@@ -99,7 +99,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     attributesMap.put("isPermaLink", "false");
     addElement(hd, "guid", attributesMap, item.getKey().toString());
     // TODO(monsur): add link
-    addMediaContent(hd, item.getMediaContent());
+    addMediaContent(hd, item, item.getMediaContent());
     addMediaThumbnail(hd, item.getMediaThumbnail());
     // TODO(monsur): add media credit
     // TODO(monsur): add media rating
@@ -121,9 +121,11 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     addElement(hd, "media:thumbnail", attributesMap, null);
   }
 
-  private void addMediaContent(TransformerHandler hd, MediaContent mediaContent) throws SAXException {
+  private void addMediaContent(TransformerHandler hd, UserItem item, MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {
     Map<String, String> attributesMap = new HashMap<String, String>();
-    attributesMap.put("url", mediaContent.getUrl());
+//  attributesMap.put("url", mediaContent.getUrl());
+    // TODO(monsur): Fix this url to work on both localhost and live
+    attributesMap.put("url", "http://boxqueue.appspot.com/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"));
     attributesMap.put("type", mediaContent.getType());
     if (mediaContent.getDuration() != null) {
       attributesMap.put("duration", Integer.toString(mediaContent.getDuration()));

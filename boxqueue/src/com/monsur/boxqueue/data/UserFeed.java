@@ -70,7 +70,18 @@ public class UserFeed {
   }
 
   public String getTitle() {
-    return title.getValue();
+    if (title == null) {
+      return getDefaultTitle();
+    }
+    String titleValue = title.getValue();
+    if (titleValue == "") {
+      return getDefaultTitle();
+    }
+    return titleValue;
+  }
+
+  private String getDefaultTitle() {
+    return user.getNickname() + "'s Boxqueue Feed";
   }
 
   public void setTitle(String title) {
