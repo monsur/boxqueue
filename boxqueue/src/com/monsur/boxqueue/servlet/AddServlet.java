@@ -3,6 +3,8 @@ package com.monsur.boxqueue.servlet;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.monsur.boxqueue.adaptor.AdaptorException;
 import com.monsur.boxqueue.adaptor.VideoAdaptor;
 import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
 import com.monsur.boxqueue.data.DataHelper;
@@ -57,7 +60,18 @@ public class AddServlet extends HttpServlet {
       return;
     }
 
-    UserItem userItem = adaptor.load();
+    List<UserItem> items = new ArrayList<UserItem>();
+    try {
+      // TODO(monsur): remove this try catch and handle the error properly
+      items = adaptor.load();
+    } catch (AdaptorException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    UserItem userItem = null;
+    if (items.size() > 0) {
+      userItem = items.get(0);
+    }
 
     UserService userService = UserServiceFactory.getUserService();
 

@@ -21,6 +21,10 @@
     <servlet-name>manageServlet</servlet-name>
     <servlet-class>com.monsur.boxqueue.servlet.ManageServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>testServlet</servlet-name>
+    <servlet-class>com.monsur.boxqueue.servlet.TestServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>addServlet</servlet-name>
@@ -37,6 +41,10 @@
   <servlet-mapping>
     <servlet-name>getContentServlet</servlet-name>
     <url-pattern>/go</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>testServlet</servlet-name>
+    <url-pattern>/test</url-pattern>
   </servlet-mapping>
   
   <security-constraint>

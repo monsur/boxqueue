@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.extensions.Rating;
@@ -33,22 +35,26 @@ public class YouTubeAdaptor implements VideoAdaptor {
     return sourceId;
   }
 
-  public UserItem load() {
+  public List<UserItem> load() throws AdaptorException {
+    List<UserItem> items = new ArrayList<UserItem>();
     try {
       YouTubeService service = new YouTubeService("ytapi-MonsurHossain-Boxqueue-pnpi1grg-1", "AI39si4_NEFnB-8RfSbrESihEjRi5nhatxikhRhEVfatjhNgwceV3zeMTgvIUsjuMORsYs1awMla_-tIpeOWZ9ISwo-rpke3eA");
       String videoEntryUrl = "http://gdata.youtube.com/feeds/api/videos/" + URLEncoder.encode(sourceId, "UTF-8");
       VideoEntry videoEntry = service.getEntry(new URL(videoEntryUrl), VideoEntry.class);
-      return getUserItem(videoEntry);
+      UserItem item = getUserItem(videoEntry);
+      if (item != null) {
+        items.add(item);
+      }
     } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
+      throw new AdaptorException(e);
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      throw new AdaptorException(e);
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new AdaptorException(e);
     } catch (ServiceException e) {
-      e.printStackTrace();
+      throw new AdaptorException(e);
     }
-    return null;
+    return items;
   }
 
   private UserItem getUserItem(VideoEntry entry) {
