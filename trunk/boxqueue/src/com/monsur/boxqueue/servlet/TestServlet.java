@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.monsur.boxqueue.adaptor.AdaptorException;
 import com.monsur.boxqueue.adaptor.GeneralUrlAdaptor;
 import com.monsur.boxqueue.adaptor.VideoAdaptor;
+import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
 import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
@@ -39,7 +40,7 @@ public class TestServlet extends HttpServlet {
       throw new IOException("invalid url = " + urlString);
     }
 
-    VideoAdaptor adaptor = GeneralUrlAdaptor.create(url);
+    VideoAdaptor adaptor = VideoAdaptorFactory.create(url);
 
     List<UserItem> items = new ArrayList<UserItem>();
     try {
@@ -52,7 +53,7 @@ public class TestServlet extends HttpServlet {
     response.getWriter().println("Found " + items.size() + " item" +
         (items.size() == 1 ? "" : "s"));
     for (UserItem item : items) {
-      response.getWriter().println("\t" + item.getTitle());
+      response.getWriter().println("\t" + item.getTitle() + ": " + item.getMediaContent().getUrl());
     }
   }
 }

@@ -1,5 +1,7 @@
 package com.monsur.boxqueue.adaptor;
 
+// TODO(monsur): Add a field for the original url so it gets logged.
+
 public class AdaptorException extends Exception {
 
   public AdaptorException() {

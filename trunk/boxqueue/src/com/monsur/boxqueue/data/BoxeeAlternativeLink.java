@@ -17,6 +17,17 @@ public class BoxeeAlternativeLink {
   @Persistent
   private String boxeeAlternativeLinkUrl;
 
+  public BoxeeAlternativeLink() {
+    label = "";
+    thumb = "";
+    boxeeAlternativeLinkUrl = "";
+  }
+
+  public boolean exists() {
+    return label != null && thumb != null && boxeeAlternativeLinkUrl != null && label != "" &&
+        thumb != "" && boxeeAlternativeLinkUrl != "";
+  }
+
   public String getLabel() {
     return label;
   }

@@ -50,10 +50,56 @@ public class UserItem {
   @Persistent
   private String guid;
 
+  @Persistent
+  private Date pubDate;
+
+  @Persistent
+  private String link = "";
+
+  @Persistent
+  private Text title;
+
+  @Persistent
+  private Text description;
+
+  @Persistent
+  @Embedded
+  private MediaContent mediaContent;
+
+  @Persistent
+  @Embedded
+  private MediaThumbnail mediaThumbnail;
+
+  @Persistent
+  @Embedded
+  private MediaCredit mediaCredit;
+
+  @Persistent
+  @Embedded
+  private MediaRating mediaRating;
+
+  @Persistent
+  @Embedded
+  private MediaCopyright mediaCopyright;
+
+  @Persistent
+  @Embedded
+  private MediaKeywords mediaKeywords;
+
+  @Persistent
+  @Embedded
+  private MediaCategory mediaCategory;
+
+  @Persistent
+  @Embedded
+  private BoxeeAlternativeLink boxeeAlternativeLink;
+
   public UserItem() {
     dateAdded = new Date();
     dateEdited = new Date();
     dateSort = new Date();
+    title = new Text("");
+    description = new Text("");
     mediaContent = new MediaContent();
     mediaThumbnail = new MediaThumbnail();
     mediaCredit = new MediaCredit();
@@ -151,50 +197,6 @@ public class UserItem {
   public void setGuid(String guid) {
     this.guid = guid;
   }
-
-  @Persistent
-  private Date pubDate;
-
-  @Persistent
-  private String link;
-
-  @Persistent
-  private Text title;
-
-  @Persistent
-  private Text description;
-
-  @Persistent
-  @Embedded
-  private MediaContent mediaContent;
-
-  @Persistent
-  @Embedded
-  private MediaThumbnail mediaThumbnail;
-
-  @Persistent
-  @Embedded
-  private MediaCredit mediaCredit;
-
-  @Persistent
-  @Embedded
-  private MediaRating mediaRating;
-
-  @Persistent
-  @Embedded
-  private MediaCopyright mediaCopyright;
-
-  @Persistent
-  @Embedded
-  private MediaKeywords mediaKeywords;
-
-  @Persistent
-  @Embedded
-  private MediaCategory mediaCategory;
-
-  @Persistent
-  @Embedded
-  private BoxeeAlternativeLink boxeeAlternativeLink;
 
   public Date getPubDate() {
     return pubDate;

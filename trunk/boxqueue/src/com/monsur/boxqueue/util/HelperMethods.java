@@ -6,6 +6,19 @@ import java.security.NoSuchAlgorithmException;
 
 public class HelperMethods {
 
+  public static String getFullUrl(String path, UrlWithQuery url) {
+    if (path.startsWith("http")) {
+      return path;
+    } else if (path.startsWith("/")) {
+      return (new StringBuilder()).append(url.getProtocol()).append("://")
+          .append(url.getAuthority()).append(path).toString();
+    } else {
+      return (new StringBuilder()).append(url.getProtocol()).append("://")
+          .append(url.getAuthority()).append("/").append(url.getPathDirectory()).append(path)
+          .toString();
+    }
+  }
+
   public static String hash(String stringToHash) throws IOException {
     MessageDigest m;
     try {

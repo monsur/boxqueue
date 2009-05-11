@@ -29,6 +29,22 @@ public class UrlWithQuery {
     return url.getHost();
   }
 
+  public String getAuthority() {
+    return url.getAuthority();
+  }
+
+  public String getPath() {
+    return url.getPath();
+  }
+
+  public String getPathDirectory() {
+    return getPath().substring(0, getPath().lastIndexOf('/') + 1);
+  }
+
+  public String getProtocol() {
+    return url.getProtocol();
+  }
+
   public String getQueryParameter(String name) {
     return queryparameters.get(name);
   }

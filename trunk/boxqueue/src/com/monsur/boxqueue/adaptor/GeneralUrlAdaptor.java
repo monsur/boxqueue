@@ -3,22 +3,27 @@ package com.monsur.boxqueue.adaptor;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.ccil.cowan.tagsoup.Parser;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import com.monsur.boxqueue.data.ItemSource;
 import com.monsur.boxqueue.data.UserItem;
+import com.monsur.boxqueue.util.HelperMethods;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class GeneralUrlAdaptor implements VideoAdaptor {
 
-  private UrlWithQuery url;
+  protected UrlWithQuery url;
 
   GeneralUrlAdaptor() {
   }
@@ -31,40 +36,19 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
     return url.getOriginalUrl();
   }
 
-  public List<UserItem> load() throws AdaptorException {
-    List<UserItem> items = new ArrayList<UserItem>();
+  protected DefaultHandler getSaxHandler() {
+    return new GeneralUrlSaxHandler();
+  }
 
+  public List<UserItem> load() throws AdaptorException {
     try {
 
       URLConnection urlConnection = getURLConnection(url);
       Parser p = new Parser();
       p.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
-      p.setContentHandler(new VideoSaxHandler());
+      p.setContentHandler(getSaxHandler());
       p.parse(new InputSource(urlConnection.getInputStream()));
-
-      int count = 0;
-      String title = ((VideoSaxHandler) p.getContentHandler()).getTitle();
-      for (Map<String, String> tagItem : ((VideoSaxHandler) p.getContentHandler()).getItems()) {
-        UserItem item = new UserItem();
-        String type = tagItem.get("type");
-        if (type == null || !type.equals("application/x-shockwave-flash")) {
-          continue;
-        }
-        String data = tagItem.get("data");
-        if (data == null) {
-          continue;
-        }
-        if (count == 0) {
-          item.setTitle(title);
-        } else {
-          item.setTitle(title + " (" + count + ")");
-        }
-
-        item.getMediaContent().setType(type);
-        item.getMediaContent().setUrl(data);
-        items.add(item);
-        count++;
-      }
+      return getItemsFromHtml(p.getContentHandler());
     } catch (IOException e) {
       throw new AdaptorException(e);
     } catch (SAXNotRecognizedException e) {
@@ -74,7 +58,33 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
     } catch (SAXException e) {
       throw new AdaptorException(e);
     }
+  }
 
+  private List<UserItem> getItemsFromHtml(ContentHandler contentHandler) {
+    List<UserItem> items = new ArrayList<UserItem>();
+    GeneralUrlSaxHandler saxHandler = (GeneralUrlSaxHandler) contentHandler;
+    int count = 0;
+    String title = saxHandler.getTitle();
+    for (Map<String, String> tagItem : saxHandler.getItems()) {
+      UserItem item = new UserItem();
+      String type = tagItem.get("type");
+      if (type == null || !type.equals("application/x-shockwave-flash")) {
+        continue;
+      }
+      String data = tagItem.get("data");
+      if (data == null) {
+        continue;
+      }
+      if (count == 0) {
+        item.setTitle(title);
+      } else {
+        item.setTitle(title + " (" + count + ")");
+      }
+      item.getMediaContent().setType(type);
+      item.getMediaContent().setUrl(HelperMethods.getFullUrl(data, url));
+      items.add(item);
+      count++;
+    }
     return items;
   }
 
@@ -94,4 +104,56 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
     adaptor.url = url;
     return adaptor;
   }
+
+  public class GeneralUrlSaxHandler extends DefaultHandler {
+
+    private boolean titleMarker = false;
+
+    private String title = "";
+    private List<Map<String, String>> items;
+
+    public GeneralUrlSaxHandler() {
+      items = new ArrayList<Map<String, String>>();
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public List<Map<String, String>> getItems() {
+      return items;
+    }
+
+    @Override
+    public void startElement(String nsURI, String strippedName,
+        String tagName, Attributes attributes)
+    throws SAXException {
+
+      if (tagName.equalsIgnoreCase("object")) {
+        Map<String, String> item = getAttributes(attributes);
+        item.put("tag", "object");
+        items.add(item);
+      } else if (tagName.equalsIgnoreCase("title")) {
+        titleMarker = true;
+      }
+
+    }
+
+    private Map<String, String> getAttributes(Attributes attributes) {
+      Map<String, String> item = new HashMap<String, String>();
+      for (int i = 0; i < attributes.getLength(); i++) {
+        item.put(attributes.getLocalName(i), attributes.getValue(i));
+      }
+      return item;
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+      if (titleMarker) {
+        title = new String(ch, start, length);
+        titleMarker = false;
+      }
+    }
+  }
+
 }
