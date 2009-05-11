@@ -36,4 +36,8 @@ public class UrlWithQuery {
   public String getOriginalUrl() {
     return originalUrl;
   }
+
+  public URL getJavaNetUrl() {
+    return url;
+  }
 }
