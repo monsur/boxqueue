@@ -26,7 +26,8 @@ public class GetContentServlet extends HttpServlet {
       return;
     }
     String url = item.getMediaContent().getUrl();
-    // TODO(monsur): Create cron to purge watched itemss
+    // TODO(monsur): Create cron to purge watched items
+    // TODO(monsur): Update watched only if useragent matches boxee
     item.setWatched(true);
     dataHelper.close();
     response.sendRedirect(url);

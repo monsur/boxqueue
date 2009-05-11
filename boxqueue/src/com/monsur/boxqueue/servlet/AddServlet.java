@@ -55,21 +55,26 @@ public class AddServlet extends HttpServlet {
     }
 
     VideoAdaptor adaptor = VideoAdaptorFactory.create(url);
-    if (adaptor == null) {
-      showError("The url is not supported: " + urlString, response);
-      return;
-    }
 
     List<UserItem> items = new ArrayList<UserItem>();
     try {
-      // TODO(monsur): remove this try catch and handle the error properly
       items = adaptor.load();
     } catch (AdaptorException e) {
-      // TODO Auto-generated catch block
+      getServletContext().log("ERROR", e);
       e.printStackTrace();
+      showError("There was an error processing this feed", response);
+      return;
     }
+
     UserItem userItem = null;
-    if (items.size() > 0) {
+    if (items.size() == 0) {
+      getServletContext().log("No videos on page: " + url.getOriginalUrl());
+      showError("No feeds found on " + url.getOriginalUrl(), response);
+      return;
+    } else if (items.size() == 1) {
+      userItem = items.get(0);
+    } else {
+      // TODO(monsur): Deal with the case of multiple videos on a page.
       userItem = items.get(0);
     }
 

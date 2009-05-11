@@ -100,7 +100,7 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     addElement(hd, "description", null, item.getDescription());
     Map<String, String> attributesMap = new HashMap<String, String>();
     attributesMap.put("isPermaLink", "false");
-    addElement(hd, "guid", attributesMap, item.getKey().toString());
+    addElement(hd, "guid", attributesMap, item.getGuid());
     // TODO(monsur): add link
     addMediaContent(hd, item, request, item.getMediaContent());
     addMediaThumbnail(hd, item.getMediaThumbnail());
@@ -114,14 +114,18 @@ public class BoxeeFeedFormatter implements BaseFormatter {
 
   private void addMediaKeywords(TransformerHandler hd,
       MediaKeywords mediaKeywords) throws SAXException {
-    addElement(hd, "media:keywords", null, mediaKeywords.getValue());
+    if (mediaKeywords.exists()) {
+      addElement(hd, "media:keywords", null, mediaKeywords.getValue());
+    }
   }
 
   private void addMediaThumbnail(TransformerHandler hd,
       MediaThumbnail mediaThumbnail) throws SAXException {
-    Map<String, String> attributesMap = new HashMap<String, String>();
-    attributesMap.put("url", mediaThumbnail.getUrl());
-    addElement(hd, "media:thumbnail", attributesMap, null);
+    if (mediaThumbnail.exists()) {
+      Map<String, String> attributesMap = new HashMap<String, String>();
+      attributesMap.put("url", mediaThumbnail.getUrl());
+      addElement(hd, "media:thumbnail", attributesMap, null);
+    }
   }
 
   private void addMediaContent(TransformerHandler hd, UserItem item, HttpServletRequest request, MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {

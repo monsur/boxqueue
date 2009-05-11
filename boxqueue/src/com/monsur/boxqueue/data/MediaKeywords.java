@@ -14,6 +14,11 @@ public class MediaKeywords {
   private Text mediaKeywordsValue;
 
   public MediaKeywords() {
+    mediaKeywordsValue = new Text("");
+  }
+
+  public boolean exists() {
+    return mediaKeywordsValue != null && mediaKeywordsValue.getValue() != "";
   }
 
   public String getValue() {

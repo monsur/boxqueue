@@ -9,7 +9,11 @@ import javax.jdo.annotations.Persistent;
 public class MediaThumbnail {
 
   @Persistent
-  private String mediaThumbnailUrl;
+  private String mediaThumbnailUrl = "";
+
+  public boolean exists() {
+    return mediaThumbnailUrl != null && mediaThumbnailUrl != "";
+  }
 
   public String getUrl() {
     return mediaThumbnailUrl;

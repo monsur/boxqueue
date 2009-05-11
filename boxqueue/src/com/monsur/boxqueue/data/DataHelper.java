@@ -38,6 +38,7 @@ public class DataHelper {
     }
     queries.clear();
     pm.close();
+    opened = false;
   }
 
   public UserFeed getUserFeed(User user) {
@@ -73,6 +74,7 @@ public class DataHelper {
     Query query = pm.newQuery(UserItem.class);
     query.setFilter("user == userParam && feedId == feedIdParam && watched == watchedParam");
     query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam, boolean watchedParam");
+    query.setOrdering("pubDate desc");
     queries.add(query);
     return (List<UserItem>) query.executeWithArray(feed.getUser(), feed.getId(), false);
   }
