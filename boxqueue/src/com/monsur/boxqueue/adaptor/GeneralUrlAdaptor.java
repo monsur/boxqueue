@@ -129,6 +129,8 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
         String tagName, Attributes attributes)
     throws SAXException {
 
+      // TODO(monsur): Add support for params inside of object tags
+      // TODO(monsur): Add support for the embed tag
       if (tagName.equalsIgnoreCase("object")) {
         Map<String, String> item = getAttributes(attributes);
         item.put("tag", "object");

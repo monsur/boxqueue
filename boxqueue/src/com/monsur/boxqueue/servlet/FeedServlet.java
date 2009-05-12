@@ -14,9 +14,8 @@ import com.monsur.boxqueue.formatter.BaseFormatter;
 import com.monsur.boxqueue.formatter.BoxeeFeedFormatter;
 import com.monsur.boxqueue.formatter.FormatterException;
 
+@SuppressWarnings("serial")
 public class FeedServlet extends HttpServlet {
-
-  private static final long serialVersionUID = 3523458428909602956L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)

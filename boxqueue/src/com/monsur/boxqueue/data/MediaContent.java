@@ -17,6 +17,10 @@ public class MediaContent {
   @Persistent
   private Integer duration;
 
+  public boolean exists() {
+    return mediaContentUrl != null && mediaContentUrl != "";
+  }
+
   public String getUrl() {
     return mediaContentUrl;
   }

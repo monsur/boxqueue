@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.monsur.boxqueue.data.DataHelper;
 import com.monsur.boxqueue.data.UserItem;
 
+@SuppressWarnings("serial")
 public class GetContentServlet extends HttpServlet {
-
-  private static final long serialVersionUID = 1174544784147342438L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,6 +27,7 @@ public class GetContentServlet extends HttpServlet {
     String url = item.getMediaContent().getUrl();
     // TODO(monsur): Create cron to purge watched items
     // TODO(monsur): Update watched only if useragent matches boxee
+    // TODO(monsur): Add a frontend toggle to say whether or not the user wants to auto-remove
     item.setWatched(true);
     dataHelper.close();
     response.sendRedirect(url);

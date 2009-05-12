@@ -12,9 +12,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.monsur.boxqueue.data.DataHelper;
 import com.monsur.boxqueue.data.UserFeed;
 
+@SuppressWarnings("serial")
 public class ManageServlet extends HttpServlet {
-
-  private static final long serialVersionUID = 7007079501928267286L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)

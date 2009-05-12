@@ -26,7 +26,6 @@ public class HelperMethods {
       m.update(stringToHash.getBytes(), 0, stringToHash.length());
       return convertToHex(m.digest());
     } catch (NoSuchAlgorithmException e) {
-      // TODO(monsur): Auto-generated catch block
       throw new IOException("No such algorithm");
     }
   }

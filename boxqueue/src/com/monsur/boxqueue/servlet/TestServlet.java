@@ -21,6 +21,7 @@ import com.monsur.boxqueue.util.UrlWithQuery;
  * @author monsur
  *
  */
+@SuppressWarnings("serial")
 public class TestServlet extends HttpServlet {
 
   @Override
@@ -31,7 +32,6 @@ public class TestServlet extends HttpServlet {
 
     String urlString = request.getParameter("url");
 //    String urlString = "http://dev-tools.appspot.com/httpresponsecodes/200";
-//    String urlString = "http://www.google.com/";
 
     UrlWithQuery url;
     try {
@@ -46,7 +46,6 @@ public class TestServlet extends HttpServlet {
     try {
       items = adaptor.load();
     } catch (AdaptorException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
