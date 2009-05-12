@@ -22,9 +22,8 @@ import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.util.HelperMethods;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
+@SuppressWarnings("serial")
 public class AddServlet extends HttpServlet {
-
-  private static final long serialVersionUID = -5001987995408331518L;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -69,13 +68,19 @@ public class AddServlet extends HttpServlet {
     UserItem userItem = null;
     if (items.size() == 0) {
       getServletContext().log("No videos on page: " + url.getOriginalUrl());
-      showError("No feeds found on " + url.getOriginalUrl(), response);
+      showError("No videos found on " + url.getOriginalUrl(), response);
       return;
     } else if (items.size() == 1) {
       userItem = items.get(0);
     } else {
       // TODO(monsur): Deal with the case of multiple videos on a page.
       userItem = items.get(0);
+    }
+
+    // Verify that this item has a content url, its the only piece of data we need
+    if (userItem.getMediaContent().exists()) {
+      showError("No video url found on " + url.getOriginalUrl(), response);
+      return;
     }
 
     UserService userService = UserServiceFactory.getUserService();
@@ -88,7 +93,6 @@ public class AddServlet extends HttpServlet {
         userFeed = dataHelper.createUserFeed(userService.getCurrentUser());
       }
 
-      // TODO(monsur): what if media:content or other things are null?
       userItem.setItemSource(adaptor.getItemSource());
       userItem.setSourceId(adaptor.getSourceId());
       userItem.setOriginalUrl(urlString);
