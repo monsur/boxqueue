@@ -78,7 +78,8 @@ public class AddServlet extends HttpServlet {
     }
 
     // Verify that this item has a content url, its the only piece of data we need
-    if (userItem.getMediaContent().exists()) {
+    if (!userItem.getMediaContent().exists()) {
+      getServletContext().log("No video url found on " + url.getOriginalUrl());
       showError("No video url found on " + url.getOriginalUrl(), response);
       return;
     }

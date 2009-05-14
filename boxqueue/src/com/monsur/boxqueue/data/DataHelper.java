@@ -74,7 +74,7 @@ public class DataHelper {
     Query query = pm.newQuery(UserItem.class);
     query.setFilter("user == userParam && feedId == feedIdParam && watched == watchedParam");
     query.declareParameters("com.google.appengine.api.users.User userParam, Long feedIdParam, boolean watchedParam");
-    query.setOrdering("pubDate desc");
+    query.setOrdering("dateSort desc");
     queries.add(query);
     return (List<UserItem>) query.executeWithArray(feed.getUser(), feed.getId(), false);
   }
