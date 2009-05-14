@@ -21,18 +21,23 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
 
   public GeneralUrlHandler() {
     stack = new Stack<SimpleElement>();
+    elements = new ArrayList<SimpleElement>();
   }
 
   @Override
   public void startElement(String nsURI, String strippedName, String tagName,
       Attributes attributes) throws SAXException {
     // TODO(monsur): Add support for params inside of object tags
-    // TODO(monsur): Add support for the embed tag
     if (tagName.equalsIgnoreCase("object")) {
       SimpleElement element = new SimpleElement();
       element.setName("object");
       element.setAttributes(getAttributes(attributes));
       stack.add(element);
+    } else if (tagName.equalsIgnoreCase("embed")) {
+      SimpleElement element = new SimpleElement();
+      element.setName("embed");
+      element.setAttributes(getAttributes(attributes));
+      stack.push(element);
     } else if (tagName.equalsIgnoreCase("title")) {
       titleMarker = true;
     }
@@ -40,9 +45,8 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
 
   @Override
   public void endElement( String uri, String localName, String tagName ) {
-    SimpleElement tmp = stack.pop();
-    if (tagName.equalsIgnoreCase("object")) {
-      elements.add(tmp);
+    if (tagName.equalsIgnoreCase("object") || tagName.equalsIgnoreCase("embed")) {
+      elements.add(stack.pop());
     }
   }
 
@@ -64,27 +68,60 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
 
   @Override
   public void endDocument() {
-    items = new ArrayList<UserItem>();
-    int count = 0;
-    for (SimpleElement element : elements) {
-      UserItem item = new UserItem();
-      String type = element.getAttributes().get("type");
-      if (type == null || !type.equals("application/x-shockwave-flash")) {
-        continue;
+    while (stack.size() > 0) {
+      SimpleElement tmp = stack.pop();
+      if (tmp.getName().equals("object") || tmp.getName().equals("embed")) {
+        elements.add(tmp);
       }
-      String data = element.getAttributes().get("data");
-      if (data == null) {
-        continue;
-      }
-      if (count == 0) {
-        item.setTitle(title);
-      } else {
-        item.setTitle(title + " (" + count + ")");
-      }
-      item.getMediaContent().setType(type);
-      item.getMediaContent().setUrl(HelperMethods.getFullUrl(data, url));
-      items.add(item);
-      count++;
     }
+    items = new ArrayList<UserItem>();
+    for (SimpleElement element : elements) {
+      UserItem item = null;
+      if (element.getName().equals("object")) {
+        item = getUserItemFromObject(element);
+      } else if (element.getName().equals("embed")) {
+        item = getUserItemFromEmbed(element);
+      }
+      if (item != null) {
+        if (item.getTitle() == null || item.getTitle() == "") {
+          if (items.size() == 0) {
+            item.setTitle(title);
+          } else {
+            item.setTitle(title + " (" + items.size() + ")");
+          }
+        }
+        items.add(item);
+      }
+    }
+  }
+
+  private UserItem getUserItemFromEmbed(SimpleElement element) {
+    String type = element.getAttributes().get("type");
+    if (type == null || !type.equals("application/x-shockwave-flash")) {
+      return null;
+    }
+    String src = element.getAttributes().get("src");
+    if (src == null) {
+      return null;
+    }
+    UserItem item = new UserItem();
+    item.getMediaContent().setType(type);
+    item.getMediaContent().setUrl(HelperMethods.getFullUrl(src, url));
+    return item;
+  }
+
+  private UserItem getUserItemFromObject(SimpleElement element) {
+    String type = element.getAttributes().get("type");
+    if (type == null || !type.equals("application/x-shockwave-flash")) {
+      return null;
+    }
+    String data = element.getAttributes().get("data");
+    if (data == null) {
+      return null;
+    }
+    UserItem item = new UserItem();
+    item.getMediaContent().setType(type);
+    item.getMediaContent().setUrl(HelperMethods.getFullUrl(data, url));
+    return item;
   }
 }
