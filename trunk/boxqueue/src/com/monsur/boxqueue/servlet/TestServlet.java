@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.monsur.boxqueue.adaptor.AdaptorException;
-import com.monsur.boxqueue.adaptor.GeneralUrlAdaptor;
 import com.monsur.boxqueue.adaptor.VideoAdaptor;
 import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
 import com.monsur.boxqueue.data.UserItem;
