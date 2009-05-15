@@ -74,6 +74,7 @@ public class AddServlet extends HttpServlet {
       userItem = items.get(0);
     } else {
       // TODO(monsur): Deal with the case of multiple videos on a page.
+      // TODO(monsur): What about multiple flash on a page, some audio, some video?
       userItem = items.get(0);
     }
 

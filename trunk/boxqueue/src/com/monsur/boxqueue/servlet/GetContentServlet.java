@@ -28,7 +28,8 @@ public class GetContentServlet extends HttpServlet {
     // TODO(monsur): Create cron to purge watched items
     // TODO(monsur): Update watched only if useragent matches boxee
     // TODO(monsur): Add a frontend toggle to say whether or not the user wants to auto-remove
-    item.setWatched(true);
+    // TODO(monsur): Uncomment the line below
+//    item.setWatched(true);
     dataHelper.close();
     response.sendRedirect(url);
   }
