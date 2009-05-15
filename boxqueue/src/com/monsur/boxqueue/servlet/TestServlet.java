@@ -51,7 +51,7 @@ public class TestServlet extends HttpServlet {
     response.getWriter().println("Found " + items.size() + " item" +
         (items.size() == 1 ? "" : "s"));
     for (UserItem item : items) {
-      response.getWriter().println("\t" + item.getTitle() + ": " + item.getMediaContent().getUrl());
+      response.getWriter().println(item.toString());
     }
   }
 }

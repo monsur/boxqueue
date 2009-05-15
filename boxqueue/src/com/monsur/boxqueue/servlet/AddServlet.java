@@ -78,6 +78,8 @@ public class AddServlet extends HttpServlet {
       userItem = items.get(0);
     }
 
+    // TODO(monsur): If general url handler pulls a url we actually recognize, reparse it?
+
     // Verify that this item has a content url, its the only piece of data we need
     if (!userItem.getMediaContent().exists()) {
       getServletContext().log("No video url found on " + url.getOriginalUrl());
