@@ -1,5 +1,7 @@
 package com.monsur.boxqueue.adaptor;
 
+import com.monsur.boxqueue.adaptor.saxhandler.BoxeeHandler;
+import com.monsur.boxqueue.adaptor.saxhandler.VimeoHandler;
 import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class VideoAdaptorFactory {
@@ -7,9 +9,22 @@ public class VideoAdaptorFactory {
   public static VideoAdaptor create(UrlWithQuery url) {
     // TODO(monsur): Add vimeo adaptor
     // TODO(monsur): Add break.com adaptor
-    if (YouTubeAdaptor.validUrl(url)) {
+    if (isYouTubeUrl(url)) {
       return YouTubeAdaptor.create(url);
+    } else {
+      BoxeeHandler handler = null;
+      if (isVimeoUrl(url)) {
+        handler = new VimeoHandler();
+      }
+      return GeneralUrlAdaptor.create(url, handler);
     }
-    return GeneralUrlAdaptor.create(url);
+  }
+
+  private static boolean isVimeoUrl(UrlWithQuery url) {
+    return url.getHost().contains("vimeo.com");
+  }
+
+  private static boolean isYouTubeUrl(UrlWithQuery url) {
+    return url.getHost().contains("youtube.com");
   }
 }

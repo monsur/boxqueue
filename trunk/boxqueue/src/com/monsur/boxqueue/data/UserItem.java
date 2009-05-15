@@ -293,4 +293,27 @@ public class UserItem {
   public void setBoxeeAlternativeLink(BoxeeAlternativeLink boxeeAlternativeLink) {
     this.boxeeAlternativeLink = boxeeAlternativeLink;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("ITEM\r\n");
+    if (title != null) {
+      sb.append("\ttitle = ").append(title.getValue()).append("\r\n");
+    }
+    if (description != null && description.getValue() != null) {
+      sb.append("\tdescription = ").append(description.getValue()).append("\r\n");
+    }
+    if (mediaKeywords != null && mediaKeywords.exists()) {
+      sb.append("\tkeywords = ").append(mediaKeywords.getValue()).append("\r\n");
+    }
+    if (mediaContent != null && mediaContent.exists()) {
+      sb.append("\tcontent url = ").append(mediaContent.getUrl()).append("\r\n");
+    }
+    if (mediaThumbnail != null && mediaThumbnail.exists()) {
+      sb.append("\tthumbnail = ").append(mediaThumbnail.getUrl()).append("\r\n");
+    }
+    sb.append("\r\n");
+    return sb.toString();
+  }
 }

@@ -106,10 +106,6 @@ public class YouTubeAdaptor implements VideoAdaptor {
     return userItem;
   }
 
-  public static boolean validUrl(UrlWithQuery url) {
-    return url.getHost().contains("youtube.com");
-  }
-
   public static VideoAdaptor create(UrlWithQuery url) {
     YouTubeAdaptor source = new YouTubeAdaptor();
     source.sourceId = url.getQueryParameter("v");

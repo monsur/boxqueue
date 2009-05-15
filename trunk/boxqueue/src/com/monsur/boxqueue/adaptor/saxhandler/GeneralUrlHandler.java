@@ -10,19 +10,25 @@ import java.util.Map.Entry;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.monsur.boxqueue.data.ItemSource;
 import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.util.HelperMethods;
 
 public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
 
   private boolean titleMarker = false;
-  private Stack<SimpleElement> stack;
   private String title = "";
+  private Stack<SimpleElement> stack;
   private List<SimpleElement> elements;
 
   public GeneralUrlHandler() {
     stack = new Stack<SimpleElement>();
     elements = new ArrayList<SimpleElement>();
+  }
+
+  @Override
+  public ItemSource getItemSource() {
+    return ItemSource.GENERAL;
   }
 
   @Override
@@ -55,14 +61,6 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
     } else {
       stack.push(tmp);
     }
-  }
-
-  private Map<String, String> getAttributes(Attributes attributes) {
-    Map<String, String> item = new HashMap<String, String>();
-    for (int i = 0; i < attributes.getLength(); i++) {
-      item.put(attributes.getLocalName(i), attributes.getValue(i));
-    }
-    return item;
   }
 
   @Override

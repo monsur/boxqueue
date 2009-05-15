@@ -23,11 +23,10 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
   protected BoxeeHandler handler;
 
   GeneralUrlAdaptor() {
-    handler = new GeneralUrlHandler();
   }
 
   public ItemSource getItemSource() {
-    return ItemSource.GENERAL;
+    return handler.getItemSource();
   }
 
   public String getSourceId() {
@@ -66,9 +65,13 @@ public class GeneralUrlAdaptor implements VideoAdaptor {
     return urlConnection;
   }
 
-  public static GeneralUrlAdaptor create(UrlWithQuery url) {
+  public static GeneralUrlAdaptor create(UrlWithQuery url, BoxeeHandler handler) {
     GeneralUrlAdaptor adaptor = new GeneralUrlAdaptor();
     adaptor.url = url;
+    if (handler == null) {
+      handler = new GeneralUrlHandler();
+    }
+    adaptor.handler = handler;
     return adaptor;
   }
 }
