@@ -31,6 +31,8 @@ public class ManageServlet extends HttpServlet {
 
     String bookmarklet = "javascript:(function(){s=document.createElement('SCRIPT');s.type='text/javascript';s.src='" + ServletHelper.getUrl("", request) + "/static/js/add.js?x='+(Math.random());document.getElementsByTagName('head')[0].appendChild(s);})();";
     request.setAttribute("bookmarklet", bookmarklet);
+    request.setAttribute("username", userService.getCurrentUser().getNickname());
+    request.setAttribute("logoutUrl", userService.createLogoutURL("/"));
 
     ServletHelper.showView("/manage.jsp", this, request, response);
   }

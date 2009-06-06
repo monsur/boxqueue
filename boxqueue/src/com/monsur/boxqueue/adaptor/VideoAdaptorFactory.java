@@ -7,7 +7,6 @@ import com.monsur.boxqueue.util.UrlWithQuery;
 public class VideoAdaptorFactory {
 
   public static VideoAdaptor create(UrlWithQuery url) {
-    // TODO(monsur): Add vimeo adaptor
     // TODO(monsur): Add break.com adaptor
     if (isYouTubeUrl(url)) {
       return YouTubeAdaptor.create(url);

@@ -1,6 +1,10 @@
 package com.monsur.boxqueue.servlet;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +29,7 @@ public class GetContentServlet extends HttpServlet {
       return;
     }
     String url = item.getMediaContent().getUrl();
+    url = createBoxeeUrl(url);
     // TODO(monsur): Create cron to purge watched items
     // TODO(monsur): Update watched only if useragent matches boxee
     // TODO(monsur): Add a frontend toggle to say whether or not the user wants to auto-remove
@@ -32,5 +37,10 @@ public class GetContentServlet extends HttpServlet {
 //    item.setWatched(true);
     dataHelper.close();
     response.sendRedirect(url);
+  }
+
+  private String createBoxeeUrl(String url) throws MalformedURLException, UnsupportedEncodingException {
+    URL urlObj = new URL(url);
+    return "flash://" + urlObj.getHost() + "/src=" + URLEncoder.encode(url, "UTF-8");
   }
 }
