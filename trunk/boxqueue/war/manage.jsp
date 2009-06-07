@@ -88,7 +88,7 @@
           <p><b>Watch your Boxqueue feed:</b>
           <ol>
             <li>When you're ready to watch the videos in your feed, run Boxee and navigate to the 
-            following section: Video %gt; Internet %gt; My Feeds</li>
+            following section: Video &gt; Internet &gt; My Feeds</li>
             <li>Select your Boxqueue feed from the list.  This will show you the videos you've
             queued up.  Once you watch a video, it will be removed from your queue.</li>
           </ol></p>

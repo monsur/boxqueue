@@ -23,7 +23,7 @@ public class VideoAdaptorFactory {
     return url.getHost().contains("vimeo.com");
   }
 
-  private static boolean isYouTubeUrl(UrlWithQuery url) {
+  public static boolean isYouTubeUrl(UrlWithQuery url) {
     return url.getHost().contains("youtube.com");
   }
 }
