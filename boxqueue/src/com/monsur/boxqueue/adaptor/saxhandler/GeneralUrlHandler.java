@@ -1,5 +1,6 @@
 package com.monsur.boxqueue.adaptor.saxhandler;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +11,14 @@ import java.util.Map.Entry;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.monsur.boxqueue.adaptor.AdaptorException;
+import com.monsur.boxqueue.adaptor.VideoAdaptor;
+import com.monsur.boxqueue.adaptor.VideoAdaptorFactory;
+import com.monsur.boxqueue.adaptor.YouTubeAdaptor;
 import com.monsur.boxqueue.data.ItemSource;
 import com.monsur.boxqueue.data.UserItem;
 import com.monsur.boxqueue.util.HelperMethods;
+import com.monsur.boxqueue.util.UrlWithQuery;
 
 public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
 
@@ -83,9 +89,7 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
     // TODO(monsur): These videos don't autoplay
     items = new ArrayList<UserItem>();
     Map<String, Boolean> urlHash = new HashMap<String, Boolean>();
-    System.out.println("Number of elements = " + elements.size());
     for (SimpleElement element : elements) {
-      System.out.println(element.toString());
       UserItem item = null;
       if (element.getName().equals("object")) {
         item = getUserItemFromObject(element);
@@ -95,11 +99,18 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
       if (item == null) {
         continue;
       }
+
+      // If this is a YouTube Video, we can load the content from the API
+      UserItem youtubeItem = getYouTubeItem(item.getMediaContent().getUrl());
+      if (youtubeItem != null) {
+        item = youtubeItem;
+      }
+
       if (urlHash.containsKey(item.getMediaContent().getUrl())) {
         continue;
-      } else {
-        urlHash.put(item.getMediaContent().getUrl(), true);
       }
+      urlHash.put(item.getMediaContent().getUrl(), true);
+
       if (item.getTitle() == null || item.getTitle() == "") {
         if (items.size() == 0) {
           item.setTitle(title);
@@ -109,6 +120,28 @@ public class GeneralUrlHandler extends BaseUrlHandler implements BoxeeHandler {
       }
       items.add(item);
     }
+  }
+
+  private UserItem getYouTubeItem(String url) {
+    UrlWithQuery mediaUrl = null;
+    try {
+      mediaUrl = new UrlWithQuery(url);
+    } catch (MalformedURLException e) {
+      mediaUrl = null;
+    }
+    if (mediaUrl != null && VideoAdaptorFactory.isYouTubeUrl(mediaUrl)) {
+      VideoAdaptor youtubeAdaptor = YouTubeAdaptor.create(mediaUrl);
+      List<UserItem> youtubeItems = null;
+      try {
+        youtubeItems = youtubeAdaptor.load();
+      } catch (AdaptorException e) {
+        youtubeItems = null;
+      }
+      if (youtubeItems != null && youtubeItems.size() > 0) {
+        return youtubeItems.get(0);
+      }
+    }
+    return null;
   }
 
   private UserItem getUserItemFromEmbed(SimpleElement element) {
