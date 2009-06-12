@@ -20,7 +20,11 @@ public class UrlWithQuery {
       String[] params = url.getQuery().split("&");
       for (String param : params) {
         String[] pair = param.split("=");
-        queryparameters.put(pair[0], pair[1]);
+        if (pair.length == 2) {
+          queryparameters.put(pair[0], pair[1]);
+        } else if (pair.length == 1) {
+          queryparameters.put(pair[0], "");
+        }
       }
     }
   }
