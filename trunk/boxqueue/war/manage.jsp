@@ -97,7 +97,8 @@
       <div>
         <h3><a href="#">Feedback</a></h3>
         <div>If you have any questions or comments about Boxqueue, plese send them here:
-        <a href="mailto:monsur+boxqueue@gmail.com">monsur+boxqueue@gmail.com</a></div>
+        <a href="mailto:monsur+boxqueue@gmail.com">monsur+boxqueue@gmail.com</a>.  
+        You can also follow us on Twitter: <a href="http://twitter.com/boxqueue">@boxqueue</a></div>
       </div>
     </div>
 </div>
