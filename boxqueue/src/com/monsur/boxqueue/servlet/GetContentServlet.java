@@ -39,7 +39,9 @@ public class GetContentServlet extends HttpServlet {
   }
 
   private String createBoxeeUrl(String url) throws MalformedURLException, UnsupportedEncodingException {
-    URL urlObj = new URL(url);
-    return "flash://" + urlObj.getHost() + "/src=" + URLEncoder.encode(url, "UTF-8");
+    // TODO(monsur): Uncomment these lines once redirects are supported with flash.
+//    URL urlObj = new URL(url);
+//    return "flash://" + urlObj.getHost() + "/src=" + URLEncoder.encode(url, "UTF-8");
+    return url;
   }
 }

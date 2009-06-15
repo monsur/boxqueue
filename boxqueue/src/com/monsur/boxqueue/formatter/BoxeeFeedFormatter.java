@@ -130,7 +130,8 @@ public class BoxeeFeedFormatter implements BaseFormatter {
     }
   }
 
-  private void addMediaContent(TransformerHandler hd, UserItem item, HttpServletRequest request, MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {
+  private void addMediaContent(TransformerHandler hd, UserItem item, HttpServletRequest request,
+      MediaContent mediaContent) throws SAXException, UnsupportedEncodingException {
     Map<String, String> attributesMap = new HashMap<String, String>();
     attributesMap.put("url", createBoxeeUrl(item, request));
     attributesMap.put("type", mediaContent.getType());
@@ -143,15 +144,15 @@ public class BoxeeFeedFormatter implements BaseFormatter {
 
   private String createBoxeeUrl(UserItem item, HttpServletRequest request)
       throws UnsupportedEncodingException {
-//    return ServletHelper.getUrl("/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"), request);
-    try {
-      URL urlObj = new URL(item.getMediaContent().getUrl());
-      return "flash://" + urlObj.getHost() + "/src=" + URLEncoder.encode(item.getMediaContent().getUrl(), "UTF-8");
-    } catch (MalformedURLException e) {
-      // TODO(monsur): Log this error, throw an exception
-      e.printStackTrace();
-    }
-    return "";
+    return ServletHelper.getUrl("/go?guid=" + URLEncoder.encode(item.getGuid(), "UTF-8"), request);
+//    try {
+//      URL urlObj = new URL(item.getMediaContent().getUrl());
+//      return "flash://" + urlObj.getHost() + "/src=" + URLEncoder.encode(item.getMediaContent().getUrl(), "UTF-8");
+//    } catch (MalformedURLException e) {
+//      // TODO(monsur): Log this error, throw an exception
+//      e.printStackTrace();
+//    }
+//    return "";
   }
 
   private void addBoxeeDisplay(TransformerHandler hd, UserFeed feed) throws SAXException {

@@ -89,6 +89,7 @@ public class DataHelper {
         item.getUser(), item.getFeedId(), item.getItemSource().ordinal(), item.getSourceId());
     if (existingItem != null) {
       existingItem.setDateSort(new Date());
+      existingItem.setWatched(false);
       item = existingItem;
     } else {
       pm.makePersistent(item);

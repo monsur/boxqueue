@@ -37,6 +37,8 @@ public class UserItem {
 
   @Persistent
   private String originalUrl;
+  @Persistent
+  private Text originalUrl2;
 
   @Persistent
   private Integer itemSource;
@@ -54,7 +56,9 @@ public class UserItem {
   private Date pubDate;
 
   @Persistent
-  private String link = "";
+  private String link;
+  @Persistent
+  private Text link2;
 
   @Persistent
   private Text title;
@@ -159,11 +163,17 @@ public class UserItem {
   }
 
   public String getOriginalUrl() {
-    return originalUrl;
+    if (originalUrl2 != null) {
+      return originalUrl2.getValue();
+    } else if (originalUrl != null) {
+      return originalUrl;
+    }
+    return "";
   }
 
   public void setOriginalUrl(String originalUrl) {
-    this.originalUrl = originalUrl;
+    this.originalUrl2 = new Text(originalUrl);
+    this.originalUrl = null;
   }
 
   public ItemSource getItemSource() {
@@ -207,11 +217,17 @@ public class UserItem {
   }
 
   public String getLink() {
-    return link;
+    if (link2 != null) {
+      return link2.getValue();
+    } else if (link != null) {
+      return link;
+    }
+    return "";
   }
 
   public void setLink(String link) {
-    this.link = link;
+    this.link2 = new Text(link);
+    this.link = null;
   }
 
   public String getDescription() {

@@ -4,12 +4,16 @@ import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import com.google.appengine.api.datastore.Text;
+
 @PersistenceCapable
 @EmbeddedOnly
 public class MediaContent {
 
   @Persistent
   private String mediaContentUrl;
+  @Persistent
+  private Text mediaContentUrl2;
 
   @Persistent
   private String type;
@@ -18,15 +22,22 @@ public class MediaContent {
   private Integer duration;
 
   public boolean exists() {
-    return mediaContentUrl != null && mediaContentUrl != "";
+    return (mediaContentUrl != null && mediaContentUrl != "") || (mediaContentUrl2 != null &&
+        mediaContentUrl2.getValue() != "");
   }
 
   public String getUrl() {
-    return mediaContentUrl;
+    if (mediaContentUrl2 != null) {
+      return mediaContentUrl2.getValue();
+    } else if (mediaContentUrl != null) {
+      return mediaContentUrl;
+    }
+    return "";
   }
 
   public void setUrl(String url) {
-    this.mediaContentUrl = url;
+    this.mediaContentUrl2 = new Text(url);
+    this.mediaContentUrl = null;
   }
 
   public String getType() {
